@@ -3,6 +3,14 @@ Information and scripts for the TimberVision dataset - coming soon!
 
 A detailed description can be found in the corresponding [paper](https://arxiv.org/pdf/2501.07360v1), which will be presented at the WACV 2025 conference.
 
+## License
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
+
+[cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
+
 ## Citing
 If you use the TimberVision dataset for your research, please use the following BibTeX entry:
 
