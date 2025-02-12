@@ -22,10 +22,10 @@ def parse_arguments():
                              'each line specifying a single track as <track id>,<label id>,<x1>,<y1>,<x2>,<y2>,...')
     parser.add_argument('--vis_dir', type=str, default=None,
                         help='directory for optional output visualizations')
-    parser.add_argument('--obb_model', type=str, required=True,
-                        help='path to oriented-object-detection model')
-    parser.add_argument('--seg_model', type=str, required=True,
-                        help='path to instance-segmentation model')
+    parser.add_argument('--obb_model', type=str, default=None,
+                        help='path to oriented-object-detection model (loads default model if not specified)')
+    parser.add_argument('--seg_model', type=str, default=None,
+                        help='path to instance-segmentation model (loads default model if not specified)')
     parser.add_argument('--min_confidence', type=float, default=0.4,
                         help='minimum confidence for results of detection and segmentation models')
     parser.add_argument('--tracker_config', type=str, default='config/botsort_optimized.yaml',
@@ -231,7 +231,7 @@ def mot_eval(input_dir, gt_dir, vis_dir, obb_model_path, seg_model_path,
     # evaluate accumulated results
     summary = acc.compute_metrics()
 
-    with open('results.csv', 'w') as results_file:
+    with open('results_mot.csv', 'w') as results_file:
         for seq_id in summary.axes[0]:
             results_file.write(f',{seq_id}')
         for metric in summary.axes[1]:

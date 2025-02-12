@@ -10,17 +10,18 @@ def parse_arguments():
                                                  'based on oriented object detection and instance segmentation')
     parser.add_argument('--input', type=str, required=True, help='input image directory or video file')
     parser.add_argument('--results_dir', type=str, required=True, help='directory for storing results')
-    parser.add_argument('--obb_model', type=str, required=True,
-                        help='path to model providing oriented bounding boxes')
-    parser.add_argument('--seg_model', type=str, required=True,
-                        help='path to model providing instance-segmentation contours')
+    parser.add_argument('--obb_model', type=str, default=None,
+                        help='path to model providing oriented bounding boxes (loads default model if not specified)')
+    parser.add_argument('--seg_model', type=str, default=None,
+                        help='path to model providing instance-segmentation contours '
+                             '(loads default model if not specified)')
     parser.add_argument('--min_confidence', type=float, default=0.4,
                         help='minimum confidence for results provided by detection and segmentation models')
-    parser.add_argument('--clip_margin', type=float, default=0,
-                        help='pixel margin from image border for identifying boundaries of clipped detections')
+    parser.add_argument('--track', action='store_true', default=False, help='apply tracking across frames')
     parser.add_argument('--tracker_config', type=str, default='config/botsort_optimized.yaml',
                         help='path to tracker-configuration file')
-    parser.add_argument('--track', action='store_true', default=False, help='apply tracking across frames')
+    parser.add_argument('--clip_margin', type=float, default=0,
+                        help='pixel margin from image border for identifying boundaries of clipped detections')
     parser.add_argument('--mask', action='store_true', default=False,
                         help='generate single-channel mask images instead of debug visualizations')
     parser.add_argument('--show_scores', action='store_true', default=False,

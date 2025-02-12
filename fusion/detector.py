@@ -1,6 +1,9 @@
 import os
 from collections import defaultdict
 from types import SimpleNamespace
+from urllib.request import urlopen
+from urllib.error import URLError
+import shutil
 import yaml
 import cv2
 import numpy as np
@@ -158,10 +161,14 @@ class Detection:
 
 # class applying oriented object detection and instance segmentation on individual frames and fusing results
 class TrunkDetector:
+    MODEL_VERSION = 'v1.0.0'
+    DEFAULT_MODEL_OBB = 'yolov8l-1024-obb.pt'
+    DEFAULT_MODEL_SEG = 'yolov8l-1024-seg.pt'
+
     # initialize with trained models for oriented object detection and instance segmentation
     def __init__(self, obb_model_path, seg_model_path):
-        self.obb_model = YOLO(obb_model_path)
-        self.seg_model = YOLO(seg_model_path)
+        self.obb_model = self.load_model(self.DEFAULT_MODEL_OBB if obb_model_path is None else obb_model_path)
+        self.seg_model = self.load_model(self.DEFAULT_MODEL_SEG if seg_model_path is None else seg_model_path)
 
     # return list of class names defined during obb training
     def get_class_names(self):
@@ -209,7 +216,27 @@ class TrunkDetector:
                 if i not in matched_indices[label]:
                     detections.append(Detection(label, component))
 
-        return {i: det for i, det in enumerate(detections)}
+        return dict(enumerate(detections))
+
+    # download model file from repository if required and initialize YOLO model
+    def load_model(self, model_path: str):
+        if os.path.isfile(model_path):
+            print(f'loading model {model_path}...')
+            return YOLO(model_path)
+        model_name = os.path.basename(model_path)
+        file_path = os.path.join(os.path.dirname(__file__), 'models', model_name)
+        if not os.path.isfile(file_path):
+            print(f'retrieving model {model_name}...')
+            try:
+                with urlopen('https://github.com/timbervision/timbervision/releases/download/'
+                             f'{self.MODEL_VERSION}/{model_name}') as f:
+                    os.makedirs(os.path.split(file_path)[0], exist_ok=True)
+                    with open(file_path, 'wb') as model_file:
+                        shutil.copyfileobj(f, model_file)
+            except URLError as e:
+                raise ValueError(f'cannot find or retrieve model {model_name}') from e
+        print(f'loading model {model_name}...')
+        return YOLO(file_path)
 
     # apply model for obb detection and return relevant results for each label
     def detect_obbs(self, image, min_confidence):

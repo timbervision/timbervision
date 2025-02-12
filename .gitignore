@@ -1,0 +1,4 @@
+fusion/models/
+results_mot.csv
+*/__pycache__/
+.vscode/

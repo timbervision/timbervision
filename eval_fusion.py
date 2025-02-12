@@ -22,10 +22,10 @@ def parse_arguments():
     parser.add_argument('--image_list', type=str, default=None,
                         help='path to a text file containing a list of included image names in separate lines '
                         '(e.g. files containing train/val/test lists in yolo format)')
-    parser.add_argument('--obb_model', type=str, required=True,
-                        help='path to oriented-object-detection model')
-    parser.add_argument('--seg_model', type=str, required=True,
-                        help='path to instance-segmentation model')
+    parser.add_argument('--obb_model', type=str, default=None,
+                        help='path to oriented-object-detection model (loads default model if not specified)')
+    parser.add_argument('--seg_model', type=str, default=None,
+                        help='path to instance-segmentation model (loads default model if not specified)')
     parser.add_argument('--min_confidence', type=float, default=0.4,
                         help='minimum confidence for results of detection and segmentation models')
     parser.add_argument('--classes', type=int, nargs='*', default=[],
